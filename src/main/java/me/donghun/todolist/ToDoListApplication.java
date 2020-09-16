@@ -1,5 +1,6 @@
 package me.donghun.todolist;
 
+import org.junit.runners.JUnit4;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
