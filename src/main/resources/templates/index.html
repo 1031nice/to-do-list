@@ -9,5 +9,8 @@
 <form method="get" th:action="@{/create}">
     <input value="make to-do-list" type="submit">
 </form>
+<tr th:each="tdl : ${tdlList}">
+    <a th:href="@{/tdl/__${tdl.date}__}" th:text="${tdl.date}"></a> <td th:text="${tdl.getContent()}"/> <br>
+</tr>
 </body>
 </html>

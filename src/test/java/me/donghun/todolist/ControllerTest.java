@@ -16,11 +16,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(Controller.class)
+@WebMvcTest({Controller.class, LocalDateFormatter.class})
 public class ControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
+    @Test
+    public void showTdl() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/tdl/2020-09-16"))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
 
     @Test
     public void initCreateForm() throws Exception {
@@ -41,17 +48,6 @@ public class ControllerTest {
         TDL tdl = (TDL)mvcResult.getFlashMap().get("tdl");
         assertThat(tdl.getContent()).isEqualTo("mycontent");
         assertThat(tdl.getDate()).isEqualTo(LocalDate.now().toString());
-    }
-
-    @Test
-    public void showTdl() throws Exception {
-        TDL testTdl = new TDL();
-        testTdl.setId(1l);
-        testTdl.setDate(LocalDate.of(2020, 9, 16));
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/tdl/2020/09/16"))
-                .andExpect(status().isOk())
-                .andDo(print());
     }
 
 }
