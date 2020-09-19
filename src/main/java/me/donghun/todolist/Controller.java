@@ -39,25 +39,39 @@ public class Controller {
         tdl.getTodos().add(new ToDo("reading"));
         tdl.getTodos().add(new ToDo("coding"));
         tdl.getTodos().add(new ToDo("running"));
-        model.addAttribute("tdl", tdl);
+        model.addAttribute(tdl); // 따로 지정안하면 이름은 클래스명으로 들어가는 것 같다
         return "createForm";
     }
 
-    // 왜 매개변수에 Model을 두었을 때는 TDL이 안잡히지?
     @PostMapping(value = "/create", params = "add")
-    public String addCreateForm(@RequestParam List<ToDo> todos, Model model) {
+    public String addCreateForm(@ModelAttribute TDL tdl) {
         // initCreateForm에서 전달한 TDL 객체째로 받는 방법은 없나? 즉, html에서 객체째로 던질 순 없나?
-        TDL tdl = new TDL();
-        tdl.setTodos(todos);
+        // 있다 그게 @ModelAttribute다
         tdl.getTodos().add(new ToDo("what to do"));
-        model.addAttribute("tdl", tdl);
+//        model.addAttribute("tdl", tdl); Model에 자동으로 추가
         return "createForm";
     }
+
+//    @PostMapping(value = "/create", params = "submit")
+//    public String processCreateForm(@RequestParam List<ToDo> todos, RedirectAttributes redirectAttributes) {
+//        TDL tdl = new TDL();
+//        tdl.setTodos(todos);
+//        tdl.setDate(LocalDate.now());
+//        redirectAttributes.addFlashAttribute("tdl", tdl);
+//        return "redirect:/tdl";
+//    }
+
+//    @PostMapping(value = "/create", params = "submit")
+//    public String processCreateForm(@RequestParam List<ToDo> todos, RedirectAttributes redirectAttributes) {
+//        TDL tdl = new TDL();
+//        tdl.setTodos(todos);
+//        tdl.setDate(LocalDate.now());
+//        redirectAttributes.addFlashAttribute("tdl", tdl);
+//        return "redirect:/tdl";
+//    }
 
     @PostMapping(value = "/create", params = "submit")
-    public String processCreateForm(@RequestParam List<ToDo> todos, RedirectAttributes redirectAttributes) {
-        TDL tdl = new TDL();
-        tdl.setTodos(todos);
+    public String processCreateForm(@ModelAttribute TDL tdl, RedirectAttributes redirectAttributes) {
         tdl.setDate(LocalDate.now());
         redirectAttributes.addFlashAttribute("tdl", tdl);
         return "redirect:/tdl";
@@ -81,10 +95,11 @@ public class Controller {
     }
 
     // Formatter 없이도 변환이 되네 생성자에서 String 매개변수를 받는 경우
+
     @ResponseBody
-    @GetMapping("/test/{test}")
-    public String test(@PathVariable ToDo test){
-        return test.getName();
+    @GetMapping("/test/{todo}")
+    public String test(@PathVariable ToDo todo){
+        return todo.getName();
     }
 
 }

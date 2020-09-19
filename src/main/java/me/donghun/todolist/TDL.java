@@ -53,7 +53,7 @@ public class TDL {
                 "id=" + id +
                 ", date=" + date +
                 ", content='" + content + '\'' +
+                ", todos=" + todos +
                 '}';
     }
-
 }

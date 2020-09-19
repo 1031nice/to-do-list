@@ -1,10 +1,10 @@
 # to-do-list
 
-###1. CRUD
-####20.9.15.<br>
+### 1. CRUD
+#### <br> 20.9.15.<br>
 - 글쓰기에 대한 get/post 요청 처리를 완료
 
-####<br> 20.9.16. <br>
+#### <br> 20.9.16. <br>
 - TDL(to-do-list) 클래스 추가(이제 더이상 글쓰기가 아니라 TDL 만들기)
 
 - 사용자가 TDL를 만들면 redirect를 이용하여 생성된 TDL 출력
@@ -21,7 +21,7 @@ MvcResult mvcResult =
 TDL tdl = (TDL)mvcResult.getFlashMap().get("tdl");
 ```
 
-####<br> 20.9.17. <br>
+#### <br> 20.9.17. <br>
 - index 페이지에서 TDL의 목록 출력
 
 TIL
@@ -49,7 +49,7 @@ $부터 처리(preprocessing)된다.
 <br> `http://localhost:8080/tdl/2020-09-17`
 <br>[참고: standard expression syntax(thymeleaf)](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#standard-expression-syntax)
 
-####<br> 20.9.19. <br>
+#### <br> 20.9.19. <br>
 
 - ToDo 클래스 추가(TDL 클래스는 List\<ToDo>를 가짐)
 - TDL 필드 이름 변경 tasks -> todos
@@ -66,6 +66,7 @@ String과 Composite Object간에 변환이 이루어진다.
 예를 들어 ToDo 클래스는 name이라는 String 타입 필드를 갖는데,
 name을 인자로 받는 생성자가 있기 때문에 Formatter
 없이도 변환이 이루어진다.
+<br>[참고: Formatter 없이도 변환이 되는 경우(blog)](https://live-everyday.tistory.com/206)
 
 - @RequestParam 리스트로 받는 방법
 <br>parameter의 이름을 같게 한 뒤 List로 받으면 된다. 
