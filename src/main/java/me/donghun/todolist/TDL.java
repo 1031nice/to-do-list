@@ -1,6 +1,8 @@
 package me.donghun.todolist;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 // to-do-list
 public class TDL {
@@ -10,6 +12,8 @@ public class TDL {
     private LocalDate date;
 
     private String content;
+
+    private List<ToDo> todos = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -33,6 +37,14 @@ public class TDL {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public List<ToDo> getTodos() {
+        return todos;
+    }
+
+    public void setTodos(List<ToDo> todos) {
+        this.todos = todos;
     }
 
     @Override

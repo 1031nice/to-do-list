@@ -1,16 +1,12 @@
 package me.donghun.todolist;
 
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @org.springframework.stereotype.Controller
@@ -38,23 +34,41 @@ public class Controller {
     }
 
     @GetMapping("/create")
-    public String initCreateForm() {
+    public String initCreateForm(Model model) {
+        TDL tdl = new TDL();
+        tdl.getTodos().add(new ToDo("reading"));
+        tdl.getTodos().add(new ToDo("coding"));
+        tdl.getTodos().add(new ToDo("running"));
+        model.addAttribute("tdl", tdl);
         return "createForm";
     }
 
-    @PostMapping("/create")
-    public String processCreateForm(String content, RedirectAttributes redirectAttributes) {
+    // 왜 매개변수에 Model을 두었을 때는 TDL이 안잡히지?
+    @PostMapping(value = "/create", params = "add")
+    public String addCreateForm(@RequestParam List<ToDo> todos, Model model) {
+        // initCreateForm에서 전달한 TDL 객체째로 받는 방법은 없나? 즉, html에서 객체째로 던질 순 없나?
         TDL tdl = new TDL();
-        tdl.setContent(content);
+        tdl.setTodos(todos);
+        tdl.getTodos().add(new ToDo("what to do"));
+        model.addAttribute("tdl", tdl);
+        return "createForm";
+    }
+
+    @PostMapping(value = "/create", params = "submit")
+    public String processCreateForm(@RequestParam List<ToDo> todos, RedirectAttributes redirectAttributes) {
+        TDL tdl = new TDL();
+        tdl.setTodos(todos);
         tdl.setDate(LocalDate.now());
         redirectAttributes.addFlashAttribute("tdl", tdl);
         return "redirect:/tdl";
     }
 
-    @ResponseBody
     @GetMapping("/tdl")
     public String showTdl(Model model) {
-        return model.asMap().get("tdl").toString();
+        TDL tdl = (TDL) model.asMap().get("tdl");
+        // TODO repository.save(tdl)
+        model.addAttribute("tdl", tdl);
+        return "tdlDetails";
     }
 
     @ResponseBody
@@ -64,6 +78,13 @@ public class Controller {
         TDL tdl = new TDL();
         tdl.setDate(date);
         return tdl.toString();
+    }
+
+    // Formatter 없이도 변환이 되네 생성자에서 String 매개변수를 받는 경우
+    @ResponseBody
+    @GetMapping("/test/{test}")
+    public String test(@PathVariable ToDo test){
+        return test.getName();
     }
 
 }

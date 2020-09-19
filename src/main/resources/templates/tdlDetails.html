@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>to-do details</title>
+</head>
+<body>
+<form th:action="@{/done}">
+    <table th:object="${tdl}">
+        <span th:text="*{date}"></span>
+        <tr th:each="todo, iter : *{todos}">
+            <th th:text="${iter.index + 1} + ."></th>
+            <td>
+                <input type="checkbox" th:id="todo + ${iter.index}" th:name="todo + ${iter.index}">
+                <label th:for="todo + ${iter.index}" th:text="${todo.name}"></label>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <input type="submit" name="done">
+</form>
+</body>
+</html>

@@ -5,9 +5,14 @@
     <title>Title</title>
 </head>
 <body>
-<form th:action="@{/create}" method="post">
-    <input name="content" type="text">
-    <input type="submit" value="제출">
+<form th:action="@{/create}" th:object="${tdl}" method="post">
+    <tr th:each="todo : *{todos}">
+        <input th:name="todos" th:value="${todo.name}" type="text"><br>
+    </tr>
+
+    <br>
+    <input type="submit" name="add" value="추가">
+    <input type="submit" name="submit" value="제출">
 </form>
 </body>
 </html>
