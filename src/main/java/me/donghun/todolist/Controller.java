@@ -1,12 +1,19 @@
 package me.donghun.todolist;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 @org.springframework.stereotype.Controller
@@ -36,42 +43,34 @@ public class Controller {
     @GetMapping("/create")
     public String initCreateForm(Model model) {
         TDL tdl = new TDL();
-        tdl.getTodos().add(new ToDo("reading"));
-        tdl.getTodos().add(new ToDo("coding"));
-        tdl.getTodos().add(new ToDo("running"));
+        tdl.getTodos().add(new ToDo());
         model.addAttribute(tdl); // 따로 지정안하면 이름은 클래스명으로 들어가는 것 같다
         return "createForm";
     }
 
+    // 여기선 binding 검사를 할 필요가 없다. 아직 제출하는 게 아니라 입력칸을 늘리기 위한 로직이기 때문에
     @PostMapping(value = "/create", params = "add")
     public String addCreateForm(@ModelAttribute TDL tdl) {
         // initCreateForm에서 전달한 TDL 객체째로 받는 방법은 없나? 즉, html에서 객체째로 던질 순 없나?
-        // 있다 그게 @ModelAttribute다
-        tdl.getTodos().add(new ToDo("what to do"));
+        // 객체째로 던질 순 없고 객체로 binding 받을 수는 있다 -> @ModelAttribute다
+        tdl.getTodos().add(new ToDo(" "));
 //        model.addAttribute("tdl", tdl); Model에 자동으로 추가
         return "createForm";
     }
 
-//    @PostMapping(value = "/create", params = "submit")
-//    public String processCreateForm(@RequestParam List<ToDo> todos, RedirectAttributes redirectAttributes) {
-//        TDL tdl = new TDL();
-//        tdl.setTodos(todos);
-//        tdl.setDate(LocalDate.now());
-//        redirectAttributes.addFlashAttribute("tdl", tdl);
-//        return "redirect:/tdl";
-//    }
-
-//    @PostMapping(value = "/create", params = "submit")
-//    public String processCreateForm(@RequestParam List<ToDo> todos, RedirectAttributes redirectAttributes) {
-//        TDL tdl = new TDL();
-//        tdl.setTodos(todos);
-//        tdl.setDate(LocalDate.now());
-//        redirectAttributes.addFlashAttribute("tdl", tdl);
-//        return "redirect:/tdl";
-//    }
-
     @PostMapping(value = "/create", params = "submit")
-    public String processCreateForm(@ModelAttribute TDL tdl, RedirectAttributes redirectAttributes) {
+    public String processCreateForm(@ModelAttribute TDL tdl,
+                                    BindingResult bindingResult,
+                                    RedirectAttributes redirectAttributes) {
+        List<ToDo> todos = tdl.getTodos();
+        // VALIDATE
+        // List에 null element가 존재한다 -> 이름이 없는 ToDo가 존재한다 -> 입력 form으로 돌려보내기
+        for(ToDo todo : todos){
+            if(todo == null){
+                bindingResult.addError(new FieldError("tdl", "todos", "there is blank"));
+                return "createForm";
+            }
+        }
         tdl.setDate(LocalDate.now());
         redirectAttributes.addFlashAttribute("tdl", tdl);
         return "redirect:/tdl";
@@ -85,21 +84,12 @@ public class Controller {
         return "tdlDetails";
     }
 
-    @ResponseBody
     @GetMapping("/tdl/{date}")
     public String showTdl(@PathVariable LocalDate date) {
         // TODO 저장소에서 해당 날짜의 to-do-list 가져오기
         TDL tdl = new TDL();
         tdl.setDate(date);
-        return tdl.toString();
-    }
-
-    // Formatter 없이도 변환이 되네 생성자에서 String 매개변수를 받는 경우
-
-    @ResponseBody
-    @GetMapping("/test/{todo}")
-    public String test(@PathVariable ToDo todo){
-        return todo.getName();
+        return "tdlDetails";
     }
 
 }

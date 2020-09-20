@@ -102,3 +102,38 @@ object가 선택되지 않은 경우라면 *는 $와 동일하다.
   <p>Nationality: <span th:text="${session.user.nationality}">Saturn</span>.</p>
 </div>
 ```
+
+#### <br> 20.9.20. <br>
+
+- @ModelAttribute 사용(parameter 직접 받지 않고 바인딩 받음)
+- 'processCreateForm' handler에서 TDL 검증
+(List<ToDo>에서 이름 없는 ToDo가 있을 경우
+error message를 담아 createForm.html으로 redirect)
+- createForm.html에서 List\<ToDo>를 순회하며 ToDo를 출력하는데
+List의 null element인 경우 ${todo.name}을 하면 예외가 발생하므로
+조건문을 이용하여 null element가 아닐 때만 ${todo.name}를 value로 갖도록 수정
+
+TIL
+- @ModelAttribute
+<br> request param, query param, form data, path variable의 정보 중에
+이 어노테이션이 붙은 핸들러 매개변수 타입의 필드와
+이름이 일치하는 것을 binding 
+- BindingResult를 이용한 error 정보 전달 방법
+```java
+/*
+...
+if(todo == null) {
+    bindingResult.addError(new FieldError("tdl", "todos", "there is blank"));
+    return "createForm";
+}
+...
+*/
+```
+```html
+<p th:if="${#fields.hasErrors('todos')}" th:errors="*{todos}">Incorrect todos</p>
+```
+- th:if와 th:unless
+```html
+<input th:if="${todo != null}" th:name="todos" th:value="${todo.name}" type="text">
+<input th:unless="${todo != null}" th:name="todos" type="text">
+```

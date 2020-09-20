@@ -53,22 +53,21 @@ public class ControllerTest {
     }
 
     @Test
-    public void addCreateForm() throws Exception {
+    public void addCreateFormWithBlank() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/create")
                 .param("add", "")
-                .param("todos", "coding")
-                .param("todos", "reading")
-                .param("todos", "running"))
+                .param("todos", ""))
                     .andExpect(status().isOk())
                     .andDo(print());
     }
 
     @Test
-    public void formatter() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/test/test"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("test"))
-                .andDo(print());
+    public void processCreateFormWithBlank() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/create")
+                .param("submit", "")
+                .param("todos", ""))
+                    .andExpect(status().is3xxRedirection())
+                    .andDo(print());
     }
 
 }

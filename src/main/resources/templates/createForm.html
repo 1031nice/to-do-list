@@ -6,8 +6,12 @@
 </head>
 <body>
 <form th:action="@{/create}" th:object="${TDL}" method="post">
+    <p th:if="${#fields.hasErrors('todos')}" th:errors="*{todos}">Incorrect todos</p>
     <tr th:each="todo : *{todos}">
-        <input th:name="todos" th:value="${todo.name}" type="text"><br>
+        <!--공백인 경우 ${todo.name}이 없어서 문제가되므로 빈 input을 보여준다-->
+        <input th:if="${todo != null}" th:name="todos" th:value="${todo.name}" type="text">
+        <input th:unless="${todo != null}" th:name="todos" type="text">
+        <br>
     </tr>
 
     <br>
