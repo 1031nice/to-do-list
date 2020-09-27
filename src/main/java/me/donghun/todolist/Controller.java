@@ -1,23 +1,26 @@
 package me.donghun.todolist;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
-import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 @org.springframework.stereotype.Controller
 public class Controller {
+
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
     // 인덱스 페이지에 이렇게 하면 데이터를 전송할 수 있을까? yes!
     @GetMapping("/")
@@ -53,7 +56,7 @@ public class Controller {
     public String addCreateForm(@ModelAttribute TDL tdl) {
         // initCreateForm에서 전달한 TDL 객체째로 받는 방법은 없나? 즉, html에서 객체째로 던질 순 없나?
         // 객체째로 던질 순 없고 객체로 binding 받을 수는 있다 -> @ModelAttribute다
-        tdl.getTodos().add(new ToDo(" "));
+        tdl.getTodos().add(new ToDo("new"));
 //        model.addAttribute("tdl", tdl); Model에 자동으로 추가
         return "createForm";
     }

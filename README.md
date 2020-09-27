@@ -137,3 +137,21 @@ if(todo == null) {
 <input th:if="${todo != null}" th:name="todos" th:value="${todo.name}" type="text">
 <input th:unless="${todo != null}" th:name="todos" type="text">
 ```
+
+#### <br> 20.9.27. <br>
+
+오늘은 TDL을 DB에 저장해보려고 했다.
+인메모리 데이터베이스인 H2로 시작하는 게
+좋을 것 같다고 생각했다. 연결도 잘되고
+테스트 삼아 쿼리를 만들어 실행했는데 역시 잘됐다.
+하지만 TDL를 저장하려고 하니 TDL의 필드 중 하나인
+List 타입 'todos'에서 막혔다. 얘를 어떻게
+저장하는 게 좋을까.
+
+TIL
+- h2 console 이용 방법
+<br> application.properties에 'spring.h2.console.enabled=true'로 설정하고
+애플리케이션을 실행시킨 뒤 다음의 주소로 이동하면
+h2 console을 이용할 수 있다.
+<br>`http://localhost:{port}/h2-console`
+
