@@ -155,3 +155,20 @@ TIL
 h2 console을 이용할 수 있다.
 <br>`http://localhost:{port}/h2-console`
 
+#### <br> 20.9.29. <br>
+
+객체를 DB 테이블에 매핑하는 문제를 해결하기 위해
+spring boot의 data jpa를 사용하자.
+sql은 postgres이고 도커를 이용하여 구축했다.
+
+TIL
+- spring boot data jpa
+<br> spring boot는 data jpa 의존성이 추가되었을 때
+application.properties에서 db 정보를 읽는다.
+따라서 application.properties에 db 정보를 써줘야 한다.
+- docker 명령어
+<br>`docker exec -i -t {image_name} bash`
+<br>`psql --username {user_name} --dbname {db_name}`
+- postgres 명령어
+<br> `\list` list of databases
+<br> `\dt` list of relations

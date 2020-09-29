@@ -10,7 +10,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.Statement;
 
-@Component
+//@Component
 public class H2Runner implements ApplicationRunner {
 
     @Autowired
