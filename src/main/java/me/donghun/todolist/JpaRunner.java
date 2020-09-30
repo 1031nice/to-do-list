@@ -20,9 +20,15 @@ public class JpaRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         ToDo toDo = new ToDo();
-        entityManager.persist(toDo);
+        ToDo toDo2 = new ToDo();
+        ToDo toDo3 = new ToDo();
+        toDo.setName("running");
+        toDo2.setName("studying");
+        toDo3.setName("exercising");
         TDL tdl = new TDL();
         tdl.getTodos().add(toDo);
+        tdl.getTodos().add(toDo2);
+        tdl.getTodos().add(toDo3);
         entityManager.persist(tdl);
 
         // hibernate 핵심 클래스

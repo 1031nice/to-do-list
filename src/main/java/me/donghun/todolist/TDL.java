@@ -1,9 +1,6 @@
 package me.donghun.todolist;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +11,11 @@ public class TDL {
     @Id @GeneratedValue
     private Long id;
 
-    private LocalDate date;
+    private LocalDate date = LocalDate.now();
 
     private String content;
 
-    @OneToMany
+    @ElementCollection
     private List<ToDo> todos = new ArrayList<>();
 
     public Long getId() {

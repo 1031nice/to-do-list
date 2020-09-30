@@ -1,27 +1,24 @@
 package me.donghun.todolist;
 
-import javax.persistence.Entity;
+import javax.persistence.Embeddable;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Entity
+@Embeddable
 public class ToDo {
 
-    @Id @GeneratedValue
-    private Long Id;
-//    @NotBlank binding을 TDL로 받아서 ToDo에 이런거 붙여도 소용이 없나봐 custom을 만들어야하나?
-//    @NotEmpty
+//    @Id @GeneratedValue
+//    private Long Id;
+
     private String name;
 
-    private int number;
-
-    public Long getId() {
-        return Id;
-    }
-
-    public void setId(Long id) {
-        Id = id;
-    }
+//    public Long getId() {
+//        return Id;
+//    }
+//
+//    public void setId(Long id) {
+//        Id = id;
+//    }
 
     public String getName() {
         return name;

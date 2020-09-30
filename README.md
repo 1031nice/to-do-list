@@ -140,6 +140,8 @@ if(todo == null) {
 
 #### <br> 20.9.27. <br>
 
+- h2 환경설정
+
 오늘은 TDL을 DB에 저장해보려고 했다.
 인메모리 데이터베이스인 H2로 시작하는 게
 좋을 것 같다고 생각했다. 연결도 잘되고
@@ -157,8 +159,9 @@ h2 console을 이용할 수 있다.
 
 #### <br> 20.9.29. <br>
 
-객체를 DB 테이블에 매핑하는 문제를 해결하기 위해
-spring boot의 data jpa를 사용하자.
+- spring data jpa + postgres(docker) 환경 구축 및 테스트
+
+객체를 DB 테이블에 매핑하는 문제를 해결하기 위해 jpa를 사용했다.
 sql은 postgres이고 도커를 이용하여 구축했다.
 
 TIL
@@ -172,3 +175,31 @@ application.properties에서 db 정보를 읽는다.
 - postgres 명령어
 <br> `\list` list of databases
 <br> `\dt` list of relations
+
+#### <br> 20.9.30. <br>
+
+- ToDo를 독립적인 entity가 아닌 TDL의 embedded 프로퍼티로 설정
+
+ToDo 클래스가 독립적인 entity일 필요가 있을까?
+ToDo는 항상 TDL 안에 존재하므로
+TDL table 안에 두고
+독립적인 entity로 만들지는 않는 게 좋을 것 같다.
+
+TIL
+- @Embedded && @Embeddable
+<br> Entity 속 객체(독립적인 entity가 아닌
+entity 속에서만 존재하는 객체)를 db table에 매핑할 때
+사용되는 어노테이션
+- @ElementCollection && @Embeddable
+<br> Entity 속 객체가 Collections(마찬가지로
+독립적인 entity가 아니라 이 entity 속에서만 존재하는
+객체일 때) db table에 매핑하는 방법
+<br>[참고: jpa/embedded-element-collection](https://www.logicbig.com/tutorials/java-ee-tutorial/jpa/embedded-element-collection.html)
+- `spring.jpa.hibernate.ddl-auto=create`
+<br> DB를 다 날리고 다시 만드는 게 아니라
+DB에 A, B 라는 테이블이 있는데 코드에서 A에 대한 DDL이 있을 경우
+B는 안 건드리고, A를 날리고 다시 만든다.
+- `spring.jpa.show-sql=true`
+<br> 생성되는 query 출력
+- `spring.jpa.properties.hibernate.format_sql=true`
+<br> query 가독성 더 좋게 출력
