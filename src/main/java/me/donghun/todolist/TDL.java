@@ -1,12 +1,15 @@
 package me.donghun.todolist;
 
+import org.hibernate.annotations.Fetch;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class TDL {
+public class TDL implements Serializable {
 
     @Id @GeneratedValue
     private Long id;
@@ -15,7 +18,7 @@ public class TDL {
 
     private String content;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<ToDo> todos = new ArrayList<>();
 
     public Long getId() {

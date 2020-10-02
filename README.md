@@ -52,8 +52,11 @@ $부터 처리(preprocessing)된다.
 #### <br> 20.9.19. <br>
 
 - ToDo 클래스 추가(TDL 클래스는 List\<ToDo>를 가짐)
+
 - TDL 필드 이름 변경 tasks -> todos
+
 - createForm.html 수정(dynamic fields)
+
 - tdlDetails.html 추가(할일 목록 출력)
 
 TIL
@@ -106,9 +109,11 @@ object가 선택되지 않은 경우라면 *는 $와 동일하다.
 #### <br> 20.9.20. <br>
 
 - @ModelAttribute 사용(parameter 직접 받지 않고 바인딩 받음)
+
 - 'processCreateForm' handler에서 TDL 검증
 (List<ToDo>에서 이름 없는 ToDo가 있을 경우
 error message를 담아 createForm.html으로 redirect)
+
 - createForm.html에서 List\<ToDo>를 순회하며 ToDo를 출력하는데
 List의 null element인 경우 ${todo.name}을 하면 예외가 발생하므로
 조건문을 이용하여 null element가 아닐 때만 ${todo.name}를 value로 갖도록 수정
@@ -118,6 +123,7 @@ TIL
 <br> request param, query param, form data, path variable의 정보 중에
 이 어노테이션이 붙은 핸들러 매개변수 타입의 필드와
 이름이 일치하는 것을 binding 
+
 - BindingResult를 이용한 error 정보 전달 방법
 ```java
 /*
@@ -169,9 +175,11 @@ TIL
 <br> spring boot는 data jpa 의존성이 추가되었을 때
 application.properties에서 db 정보를 읽는다.
 따라서 application.properties에 db 정보를 써줘야 한다.
+
 - docker 명령어
 <br>`docker exec -i -t {image_name} bash`
 <br>`psql --username {user_name} --dbname {db_name}`
+
 - postgres 명령어
 <br> `\list` list of databases
 <br> `\dt` list of relations
@@ -190,16 +198,58 @@ TIL
 <br> Entity 속 객체(독립적인 entity가 아닌
 entity 속에서만 존재하는 객체)를 db table에 매핑할 때
 사용되는 어노테이션
+
 - @ElementCollection && @Embeddable
 <br> Entity 속 객체가 Collections(마찬가지로
 독립적인 entity가 아니라 이 entity 속에서만 존재하는
 객체일 때) db table에 매핑하는 방법
 <br>[참고: jpa/embedded-element-collection](https://www.logicbig.com/tutorials/java-ee-tutorial/jpa/embedded-element-collection.html)
+
 - `spring.jpa.hibernate.ddl-auto=create`
 <br> DB를 다 날리고 다시 만드는 게 아니라
 DB에 A, B 라는 테이블이 있는데 코드에서 A에 대한 DDL이 있을 경우
 B는 안 건드리고, A를 날리고 다시 만든다.
+
 - `spring.jpa.show-sql=true`
 <br> 생성되는 query 출력
+
 - `spring.jpa.properties.hibernate.format_sql=true`
 <br> query 가독성 더 좋게 출력
+
+#### <br> 20.10.2. <br>
+
+- TDLRepository(extends JpaRepository) 생성
+
+JpaRepository를 상속받는 TDLRepository를 만들었다.
+
+embedded 관계에서도 lazy loading이 가능한지 궁금해서
+이를 확인해보았다.
+
+TIL
+- Embedded 프로퍼티도 lazy/eager loading 설정 가능(lazy가 default)
+<br> one to many 관계일 때 one 입장에서
+many를 lazy하게 가져올 수 있다는 것은 알고 있었다.
+현재 프로젝트는 entity끼리의 관계가 아니라
+하나의 entity와 그 안에 embedded 프로퍼티 관계인데
+이런 상황에서도 lazy loading이 되는지 알아보고 싶었다.
+확인 결과 lazy/eager loading이 설정 가능하다(default lazy).
+설정 방법은 다음과 같다.
+<br> [참고: JPA @Embedded, @Embeddable, @ElementCollection 그리고 FetchType](https://live-everyday.tistory.com/209)
+```java
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<ToDo> todos = new ArrayList<>();
+```
+
+- `spring.jpa.hibernate.ddl-auto=create`
+<br> create로 값을 두면 프로그램에서 다루는 테이블을
+매번 drop하고 새로 만든다. 따라서 데이터베이스에
+저장되어 있는 값을 바탕으로 테스트를 할 생각이라면
+이때는 옵션을 create가 아니라 update로 주어야 한다.
+
+- @DataJpaTest
+<br>@WebMvcTest와 마찬가지로 슬라이싱 테스트에 해당한다.
+데이터와 관련된 설정만 적용하고 데이터와 관련된 컴포넌트만
+빈으로 등록한다. 또한 @Transactional 어노테이션을
+메타 어노테이션으로 담고 있으며, h2 의존성이 추가되어 있는 경우
+테스트용 DB로 h2 데이터베이스를 사용한다.
+다음에 @WebMvcTest와 함께 더 자세히 살펴보는 게 좋을 것 같다.
