@@ -218,7 +218,7 @@ B는 안 건드리고, A를 날리고 다시 만든다.
 
 #### <br> 20.10.2. <br>
 
-- TDLRepository(extends JpaRepository) 생성
+- TDLRepository(extends JpaRepository) 인터페이스 추가
 
 JpaRepository를 상속받는 TDLRepository를 만들었다.
 
@@ -253,3 +253,21 @@ many를 lazy하게 가져올 수 있다는 것은 알고 있었다.
 메타 어노테이션으로 담고 있으며, h2 의존성이 추가되어 있는 경우
 테스트용 DB로 h2 데이터베이스를 사용한다.
 다음에 @WebMvcTest와 함께 더 자세히 살펴보는 게 좋을 것 같다.
+
+#### <br> 20.10.27. <br>
+
+- Controller의 showTdl 메소드 수정
+
+날짜가 아니라 id를 path variable로 받도록 수정하였다.
+`http://localhost:8080/tdl/2020-10-27` =>
+`http://localhost:8080/tdl/1`
+
+TIL
+- spring data jpa의 도움을 받아 domain class converter를 이용해서
+repository로부터 가져온 TDL에는 todos 정보가 비어있다.
+FetchType.EAGER 임에도 말이다. 그래서 path variable로 id를 받아 직접 repository의
+findById 메소드를 통해 가져오자 todos 정보까지 잘 가져왔다.
+
+내일은 인덱스 페이지를 수정해보자. 지금은 임의의 데이터를 컨트롤러에서 만든 뒤
+이를 인덱스 페이지에 전달하고 있는데, 인덱스 페이지는 repository에서 tdl을
+가져와 출력해야 한다.

@@ -10,7 +10,7 @@
     <input value="make to-do-list" type="submit">
 </form>
 <tr th:each="tdl : ${tdlList}">
-    <a th:href="@{/tdl/__${tdl.date}__}" th:text="${tdl.date}"></a> <td th:text="${tdl.getContent()}"/> <br>
+    <a th:href="@{/tdl/__${tdl.id}__}" th:text="${tdl.date}"></a><br>
 </tr>
 </body>
 </html>

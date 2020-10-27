@@ -26,23 +26,28 @@ public class JpaRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        Optional<TDL> tdl = repository.findById(1L);
+        ToDo toDo = new ToDo();
+        ToDo toDo2 = new ToDo();
+        ToDo toDo3 = new ToDo();
+        toDo.setName("running");
+        toDo2.setName("coding");
+        toDo3.setName("studying");
 
-//        ToDo toDo = new ToDo();
-//        ToDo toDo2 = new ToDo();
-//        ToDo toDo3 = new ToDo();
-//        toDo.setName("running");
-//        toDo2.setName("studying");
-//        toDo3.setName("exercising");
-//        TDL tdl = new TDL();
-//        tdl.getTodos().add(toDo);
-//        tdl.getTodos().add(toDo2);
-//        tdl.getTodos().add(toDo3);
+        TDL tdl = new TDL();
+        tdl.getTodos().add(toDo);
+        tdl.getTodos().add(toDo2);
+        tdl.getTodos().add(toDo3);
+
+        repository.save(tdl);
+
 //        entityManager.persist(tdl);
-
         // hibernate 핵심 클래스
 //        Session session = entityManager.unwrap(Session.class);
 //        session.save(tdl);
+    }
+
+    class Account {
+
     }
 
 }

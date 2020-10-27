@@ -7,7 +7,7 @@
 <body>
 <form th:action="@{/done}">
     <table th:object="${tdl}">
-        <span th:text="*{date}"></span>
+        <tr th:text="*{date}"></tr>
         <tr th:each="todo, iter : *{todos}">
             <th th:text="${iter.index + 1} + ."></th>
             <td>

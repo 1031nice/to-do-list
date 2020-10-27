@@ -16,8 +16,6 @@ public class TDL implements Serializable {
 
     private LocalDate date = LocalDate.now();
 
-    private String content;
-
     @ElementCollection(fetch = FetchType.EAGER)
     private List<ToDo> todos = new ArrayList<>();
 
@@ -37,14 +35,6 @@ public class TDL implements Serializable {
         this.date = date;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     public List<ToDo> getTodos() {
         return todos;
     }
@@ -58,7 +48,6 @@ public class TDL implements Serializable {
         return "TDL{" +
                 "id=" + id +
                 ", date=" + date +
-                ", content='" + content + '\'' +
                 ", todos=" + todos +
                 '}';
     }
