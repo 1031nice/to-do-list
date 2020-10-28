@@ -26,12 +26,10 @@ public class JpaRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        ToDo toDo = new ToDo();
-        ToDo toDo2 = new ToDo();
-        ToDo toDo3 = new ToDo();
-        toDo.setName("running");
-        toDo2.setName("coding");
-        toDo3.setName("studying");
+        ToDo toDo = new ToDo("running");
+        ToDo toDo2 = new ToDo("coding");
+        ToDo toDo3 = new ToDo("studying");
+        toDo3.setDone(true);
 
         TDL tdl = new TDL();
         tdl.getTodos().add(toDo);

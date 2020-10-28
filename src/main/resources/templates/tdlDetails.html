@@ -5,13 +5,20 @@
     <title>to-do details</title>
 </head>
 <body>
-<form th:action="@{/done}">
+<form th:action="@{/update}" method="post">
     <table th:object="${tdl}">
         <tr th:text="*{date}"></tr>
         <tr th:each="todo, iter : *{todos}">
             <th th:text="${iter.index + 1} + ."></th>
             <td>
-                <input type="checkbox" th:id="todo + ${iter.index}" th:name="todo + ${iter.index}">
+                <!-- IF CUSTOMER IS ANONYMOUS -->
+                <span th:if="${todo.done}">
+                    <input type="checkbox" checked th:id="todo + ${iter.index}" th:name="todo">
+                </span>
+                <!-- ELSE -->
+                <span th:unless="${todo.done}">
+                    <input type="checkbox" th:id="todo + ${iter.index}" th:name="todo">
+                </span>
                 <label th:for="todo + ${iter.index}" th:text="${todo.name}"></label>
             </td>
         </tr>

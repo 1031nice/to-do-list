@@ -6,9 +6,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -23,15 +25,7 @@ public class Controller {
     // 인덱스 페이지에 이렇게 하면 데이터를 전송할 수 있을까? yes!
     @GetMapping("/")
     public ModelAndView index(){
-        // create test-data
-        TDL[] tdls = new TDL[3];
-        tdls[0] = new TDL();
-        tdls[0].setDate(LocalDate.of(2020, 10, 31));
-        tdls[1] = new TDL();
-        tdls[1].setDate(LocalDate.of(2019, 10, 31));
-        tdls[2] = new TDL();
-        tdls[2].setDate(LocalDate.of(2018, 10, 31));
-        List<TDL> tdlList = Arrays.asList(tdls);
+        List<TDL> tdlList = tdlRepository.findAll();
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");
         mav.addObject("tdlList", tdlList);
@@ -70,20 +64,13 @@ public class Controller {
             }
         }
         tdl.setDate(LocalDate.now());
-        redirectAttributes.addFlashAttribute("tdl", tdl);
-        return "redirect:/tdl";
-    }
-
-    @GetMapping("/tdl")
-    public String showTdl(Model model) {
-        TDL tdl = (TDL) model.asMap().get("tdl");
-        // TODO repository.save(tdl)
-        model.addAttribute("tdl", tdl);
-        return "tdlDetails";
+        redirectAttributes.addFlashAttribute("tdl", tdl); // flash를 받는 하나의 handler를 만드는 게 나으려나?
+        tdlRepository.save(tdl);
+        return "redirect:/tdl/" + tdl.getId();
     }
 
     @GetMapping("/tdl/{id}")
-    public ModelAndView showTdl(@PathVariable Long id) { // domain class converter by spring data jpa
+    public ModelAndView showTdl(@PathVariable Long id, HttpSession session) {
         Optional<TDL> byId = tdlRepository.findById(id);
         TDL tdl = null;
         if(byId.isPresent())
@@ -92,7 +79,23 @@ public class Controller {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("tdlDetails");
         mav.addObject("tdl", tdl);
+        session.setAttribute("tdl", tdl);
         return mav;
+    }
+
+    @PostMapping("/update")
+    public String update(HttpSession session, @RequestParam("todo") List<String> checkboxes) {
+        TDL tdl = (TDL) session.getAttribute("tdl");
+        for(int i=0; i<tdl.getTodos().size(); i++) {
+            if(checkboxes.get(i).equals("on")) { // checked
+                tdl.getTodos().get(i).setDone(true);
+            }
+            else
+                tdl.getTodos().get(i).setDone(false);
+        }
+        tdlRepository.save(tdl);
+        session.removeAttribute("tdl");
+        return "redirect:/";
     }
 
 }

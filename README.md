@@ -271,3 +271,23 @@ findById 메소드를 통해 가져오자 todos 정보까지 잘 가져왔다.
 내일은 인덱스 페이지를 수정해보자. 지금은 임의의 데이터를 컨트롤러에서 만든 뒤
 이를 인덱스 페이지에 전달하고 있는데, 인덱스 페이지는 repository에서 tdl을
 가져와 출력해야 한다.
+
+#### <br> 20.10.27. <br>
+
+- index 페이지에서 DB의 TDL을 목록을 출력하도록 수정
+
+- ToDo 클래스에 isDone 필드(완수 했는지 안했는지를 나타냄) 추가
+
+- tdlDetails 뷰에서 ToDo의 checkbox 체크/체크취소 가능하도록 구현
+
+이 기능을 구현할 때 HttpSession을 사용했다.
+tdlDetails 뷰를 보여줄 때 Controller에서 repository의 TDL 객체를 가져와
+주입해주는데, 이 받은 객체를 tdlDetails 뷰에서 다시 Controller로 전송할
+마땅한 방법을 못찾았기 때문이다. 뷰에서 `th:object=${tdl}`로 전달하고
+컨트롤러에서 `@ModelAttribute`로 받으려고 해봤는데 이러면 컨틀롤러에서
+기존의 TDL 객체를 받는 게 아니라 새로운 TDL 객체를 생성해서 binding을 시도한다.
+
+TIL
+- 필드 이름이 isDone인 경우 thymeleaf에서 참조할 때는 done으로 참조해야 한다.
+<br>`<span th:if="${todo.done}">` O
+<br>`<span th:if="${todo.isDone}">` X
