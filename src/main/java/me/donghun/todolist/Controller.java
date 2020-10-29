@@ -84,14 +84,13 @@ public class Controller {
     }
 
     @PostMapping("/update")
-    public String update(HttpSession session, @RequestParam("todo") List<String> checkboxes) {
+    public String update(HttpSession session, @RequestParam("todo") List<Integer> checked) {
         TDL tdl = (TDL) session.getAttribute("tdl");
-        for(int i=0; i<tdl.getTodos().size(); i++) {
-            if(checkboxes.get(i).equals("on")) { // checked
-                tdl.getTodos().get(i).setDone(true);
-            }
-            else
-                tdl.getTodos().get(i).setDone(false);
+        for(ToDo toDo : tdl.getTodos()){ // 모두 체크를 푼 뒤
+            toDo.setDone(false);
+        }
+        for(int i=0; i<checked.size(); i++) { // 제출했을 때 체크 되어있는 것만 닷 ㅣ체크
+            tdl.getTodos().get(checked.get(i)).setDone(true);
         }
         tdlRepository.save(tdl);
         session.removeAttribute("tdl");

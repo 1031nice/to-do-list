@@ -291,3 +291,33 @@ TIL
 - 필드 이름이 isDone인 경우 thymeleaf에서 참조할 때는 done으로 참조해야 한다.
 <br>`<span th:if="${todo.done}">` O
 <br>`<span th:if="${todo.isDone}">` X
+
+
+#### <br> 20.10.27. <br>
+
+- tdlDetails 뷰에서 ToDo의 checkbox 체크/체크취소시 발생하는 에러 제거
+
+모든 ToDo가 체크된 경우에만 제대로 동작하고, 하나라도 체크되지 않은 ToDo가 있는 경우
+에러가 발생했다. 체크된 checkbox만 컨트롤러에 전달되는 것을 모른채로 코드를 짰기 때문이다.
+(5개의 체크박스가 있을 때 3개를 체크하고 submit하면 3개만 컨트롤러에 전달된다.)
+
+TIL
+- checkbox에서 th:checked를 이용할 수 있다.
+```html
+    <!-- th:checked 사용하기 전 코드 -->
+    <span th:if="${todo.done}">
+        <input type="checkbox" checked th:id="todo + ${iter.index}" th:name="todo">
+    </span>
+    <span th:unless="${todo.done}">
+        <input type="checkbox" th:id="todo + ${iter.index}" th:name="todo">
+    </span>
+```
+```html
+    <!-- th:checked 사용한 코드 -->
+    <span>
+        <input type="checkbox" name="todo" th:value="${iter.index}" th:checked="${todo.done}"/>
+    </span>
+```
+
+- checkbox에서 value를 설정해주지 않으면 "on"이라는 값이 컨트롤러로 전달되어
+checkbox 간에 구분을 할 수가 없다.

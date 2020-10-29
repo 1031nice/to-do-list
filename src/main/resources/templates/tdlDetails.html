@@ -11,13 +11,8 @@
         <tr th:each="todo, iter : *{todos}">
             <th th:text="${iter.index + 1} + ."></th>
             <td>
-                <!-- IF CUSTOMER IS ANONYMOUS -->
-                <span th:if="${todo.done}">
-                    <input type="checkbox" checked th:id="todo + ${iter.index}" th:name="todo">
-                </span>
-                <!-- ELSE -->
-                <span th:unless="${todo.done}">
-                    <input type="checkbox" th:id="todo + ${iter.index}" th:name="todo">
+                <span>
+                    <input type="checkbox" name="todo" th:value="${iter.index}" th:checked="${todo.done}"/>
                 </span>
                 <label th:for="todo + ${iter.index}" th:text="${todo.name}"></label>
             </td>
