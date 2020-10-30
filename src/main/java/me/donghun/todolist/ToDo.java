@@ -1,6 +1,7 @@
 package me.donghun.todolist;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Embeddable
 public class ToDo {
@@ -39,4 +40,14 @@ public class ToDo {
                 ", isDone=" + isDone +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ToDo toDo = (ToDo) o;
+        return isDone == toDo.isDone &&
+                Objects.equals(name, toDo.name);
+    }
+
 }

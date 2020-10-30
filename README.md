@@ -272,7 +272,7 @@ findById 메소드를 통해 가져오자 todos 정보까지 잘 가져왔다.
 이를 인덱스 페이지에 전달하고 있는데, 인덱스 페이지는 repository에서 tdl을
 가져와 출력해야 한다.
 
-#### <br> 20.10.27. <br>
+#### <br> 20.10.28. <br>
 
 - index 페이지에서 DB의 TDL을 목록을 출력하도록 수정
 
@@ -293,9 +293,9 @@ TIL
 <br>`<span th:if="${todo.isDone}">` X
 
 
-#### <br> 20.10.27. <br>
+#### <br> 20.10.29. <br>
 
-- tdlDetails 뷰에서 ToDo의 checkbox 체크/체크취소시 발생하는 에러 제거
+- tdlDetails 뷰에서 checkbox 체크/체크취소시 발생하는 에러 제거
 
 모든 ToDo가 체크된 경우에만 제대로 동작하고, 하나라도 체크되지 않은 ToDo가 있는 경우
 에러가 발생했다. 체크된 checkbox만 컨트롤러에 전달되는 것을 모른채로 코드를 짰기 때문이다.
@@ -321,3 +321,28 @@ TIL
 
 - checkbox에서 value를 설정해주지 않으면 "on"이라는 값이 컨트롤러로 전달되어
 checkbox 간에 구분을 할 수가 없다.
+
+#### <br> 20.10.30. <br>
+
+- 컨트롤러 메소드 이름 변경 `showTdl()` -> `getTdl()`
+
+- 컨트롤러 `update()` 코드 수정
+<br>사용자가 할 일 체크박스에 대해 체크를 취소할 수 있도록 구현하였는데,
+모든 체크박스가 체크되지 않은 채로 submit할 경우 param이 전달되지 않아서 `400 bad request`가 발생하였다.
+`@RequestParam`의 `required` 옵션을 `false`로 변경하였고, 메소드 내에서 null인 경우에도 잘 동작하도록 수정하였다.
+
+- Controller 테스트 코드 작성
+<br>`processCreateForm()`
+<br>`processCreateFormWithBlank()`
+<br>`getTdl()`
+
+TIL
+- 객체 A를 repository에 save한 뒤, save된 객체를 가져왔을 때 이 객체를 A'라 한다면,
+A와 A'는 동일한 객체가 아니다.
+
+- assertJ의 `isEqualTo()`: `equals()`를 이용한 동등성 비교
+<br>assertJ의 `isSameAs()`: 동일성 비교
+<br>동등성을 비교하기 위해서는 객체에 equals()를 오버라이드 하거나, 테스트 코드 내에서
+객체의 동일성을 비교하는 별도의 메소드를 만들어야 한다.
+
+다음엔 validation이랑 bindingResult 이용해서 processCreateForm() 개선해보자.
