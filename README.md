@@ -331,14 +331,18 @@ checkbox 간에 구분을 할 수가 없다.
 모든 체크박스가 체크되지 않은 채로 submit할 경우 param이 전달되지 않아서 `400 bad request`가 발생하였다.
 `@RequestParam`의 `required` 옵션을 `false`로 변경하였고, 메소드 내에서 null인 경우에도 잘 동작하도록 수정하였다.
 
-- Controller 테스트 코드 작성
+- 컨트롤러 테스트 코드 작성
 <br>`processCreateForm()`
 <br>`processCreateFormWithBlank()`
 <br>`getTdl()`
 
 TIL
-- 객체 A를 repository에 save한 뒤, save된 객체를 가져왔을 때 이 객체를 A'라 한다면,
-A와 A'는 동일한 객체가 아니다.
+- <strike>객체 A를 repository에 save한 뒤, save된 객체를 가져왔을 때 이 객체를 A'라 한다면,
+A와 A'는 동일한 객체가 아니다.</strike>
+<br> 객체 A를 save 했을 때 save 메소드가 리턴하는 객체와 A 객체는
+동일하다. 하지만 DB에 저장된 A를 불러오면 A랑 다르다. 어 근데 왜
+https://www.youtube.com/watch?v=Y0tUaidXRqo&t=2090s&ab_channel=%EB%B0%B1%EA%B8%B0%EC%84%A0
+여기서는 같다고 하지?..  
 
 - assertJ의 `isEqualTo()`: `equals()`를 이용한 동등성 비교
 <br>assertJ의 `isSameAs()`: 동일성 비교
@@ -346,3 +350,29 @@ A와 A'는 동일한 객체가 아니다.
 객체의 동일성을 비교하는 별도의 메소드를 만들어야 한다.
 
 다음엔 validation이랑 bindingResult 이용해서 processCreateForm() 개선해보자.
+
+20.11.1.
+
+`ToDoFormatter`가 없으면 `createForm.html`에서 `input` 태그에
+공백을 주었을 때 `TDL`에 바인딩 된 `ToDo`를 보면 `null`이 아니라 공백으로 binding이 되는데,
+`ToDoFormatter`를 등록하면 `null`이 되네?..
+
+20.11.2.
+
+- `Controller`의 `updateTdl()` 개선
+
+HttpSession을 이용하지 않고 hidden input으로 TDL 객체의 값을 전달하는 방식을 써서
+update를 구현하였다. 더 자연스러워진 것 같다.
+
+TIL
+
+- view에서는 객체째로 저장할 방법도, 전달할 방법도 없다.
+<br>controller에서 view에 model 정보 담아서 주면 view는 그걸 받을 수 있다.
+view가 순수한 html이 아니라 내부적으로 html을 만드는 어떤 엔진이기 때문이다.
+HTML에서 그 객체의 정보를 쓰는 곳에 view가 적절한 값을 대입해준다.
+하지만 view가 HTML을 만들고 나면 그 객체를 계속 저장하고 있을 수 없다.
+순수한 HTML에는 객체라는 개념이 없고 당연히 그걸 저장할 수도 없기 때문이다.
+그래서 controller에서 view로 넘긴 객체를 다시 어떤 handler로 보내려면
+객체 그 자체를 보낼 방법은 없고 view에 hidden input 이라도 만들어서
+보내줘야 그 객체를 받는 효과를 낼 수 있는 것 같다. 그러지 않고 view에서 `th:object`하고 handler에서 `@ModelAttribute` 하면
+그냥 객체가 새로 생긴 다음 아무것도 바인딩 되지 않는다.

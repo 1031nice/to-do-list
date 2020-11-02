@@ -1,11 +1,15 @@
 package me.donghun.todolist;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Embeddable
 public class ToDo {
 
+    @NotBlank
     private String name;
 
     private boolean isDone = false;

@@ -3,6 +3,8 @@ package me.donghun.todolist;
 import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ public class TDL implements Serializable {
     private LocalDate date = LocalDate.now();
 
     @ElementCollection(fetch = FetchType.EAGER)
+    @NotNull
     private List<ToDo> todos = new ArrayList<>();
 
     public Long getId() {

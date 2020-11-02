@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -34,28 +35,29 @@ public class ControllerTest {
     public void processCreateForm() throws Exception {
         long count = tdlRepository.count();
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/create")
+        MvcResult mvcResult = mockMvc.perform(post("/create")
                 .param("todos", "coding")
                 .param("todos", "running")
                 .param("submit", "submit"))
-                    .andExpect(status().is3xxRedirection())
-                    .andExpect(redirectedUrl("/tdl/"+Long.toString(count + 1L)))
-                    .andDo(print())
-                    .andReturn();
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/tdl/"+Long.toString(count + 1L)))
+                .andDo(print())
+                .andReturn();
         TDL tdl = (TDL)mvcResult.getFlashMap().get("tdl");
         assertThat(tdl.getDate()).isEqualTo(LocalDate.now().toString());
     }
 
     @Test
     public void processCreateFormWithBlank() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/create")
+        mockMvc.perform(post("/create")
                 .param("submit", "")
                 .param("todos", "running")
                 .param("todos", "")
                 .param("todos", "coding"))
-                    .andExpect(view().name("createForm"))
-                    .andExpect(status().isOk())
-                    .andDo(print());
+                .andExpect(model().hasErrors())
+                .andExpect(view().name("createOrUpdateForm"))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
     @Test
@@ -65,8 +67,10 @@ public class ControllerTest {
         newTdl.getTodos().add(new ToDo("coding"));
         newTdl.getTodos().add(new ToDo("running"));
         newTdl.getTodos().add(new ToDo("reading"));
-        TDL savedTdl = tdlRepository.save(newTdl);
-
+        TDL savedTdl = tdlRepository.saveAndFlush(newTdl);
+        assertThat(savedTdl).isEqualTo(newTdl);
+        TDL tdl2 = tdlRepository.findById(savedTdl.getId()).orElse(new TDL());
+        assertThat(savedTdl).isEqualTo(tdl2); // 왜실패 ..
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/tdl/" + savedTdl.getId()))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -74,6 +78,10 @@ public class ControllerTest {
         ModelAndView mav = result.getModelAndView();
         TDL tdl = (TDL) mav.getModel().get("tdl");
         assertThat(tdl).isNotNull();
+        TDL tdl3 = tdlRepository.findById(savedTdl.getId()).orElse(new TDL());
+        assertThat(savedTdl).isNotEqualTo(tdl3);
+        assertThat(tdl).isNotEqualTo(tdl2);
+        assertThat(savedTdl).isNotEqualTo(tdl);
         checkSameTdl(savedTdl, tdl);
         assertThat(mav.getViewName()).isEqualTo("tdlDetails");
     }
@@ -87,6 +95,14 @@ public class ControllerTest {
         for(int i = 0; i< tdl1Todos.size(); i++){
             assertThat(tdl1Todos.get(i)).isEqualTo(tdl2Todos.get(i));
         }
+    }
+
+    @Test
+    public void updateTdl() throws Exception {
+        mockMvc.perform(post("/update")
+            .param("todos", "coding!"))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
 }
