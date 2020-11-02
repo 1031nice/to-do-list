@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -99,10 +100,38 @@ public class ControllerTest {
 
     @Test
     public void updateTdl() throws Exception {
-        mockMvc.perform(post("/update")
-            .param("todos", "coding!"))
-                .andExpect(status().isOk())
-                .andDo(print());
+        TDL tdl = makeTdl();
+
+        // 0번째 ToDo와 2번째 ToDo가 체크되었을 때
+        MvcResult result = mockMvc.perform(post("/update/"+tdl.getId())
+                .param("checkedToDos", "0")
+                .param("checkedToDos", "2")
+                .param("todos", "coding")
+                .param("todos", "running")
+                .param("todos", "reading"))
+                .andExpect(flash().attributeExists("TDL"))
+                .andExpect(status().is3xxRedirection())
+                .andDo(print())
+                .andReturn();
+        TDL returnTdl = (TDL) result.getFlashMap().get("TDL");
+        List<ToDo> returnTdlTodos = returnTdl.getTodos();
+
+        // 0번째 ToDo와 2번째 ToDo만 isDone이 true여야 한다
+        assertThat(returnTdlTodos.get(0).isDone()).isTrue();
+        assertThat(returnTdlTodos.get(1).isDone()).isFalse();
+        assertThat(returnTdlTodos.get(2).isDone()).isTrue();
     }
 
+    private TDL makeTdl() {
+        TDL tdl = new TDL();
+        tdl.setId(1L);
+        ToDo toDo1 = new ToDo("coding");
+        ToDo toDo2 = new ToDo("running");
+        ToDo toDo3 = new ToDo("reading");
+        List<ToDo> todos = tdl.getTodos();
+        todos.add(toDo1);
+        todos.add(toDo2);
+        todos.add(toDo3);
+        return tdl;
+    }
 }

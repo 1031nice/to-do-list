@@ -71,29 +71,33 @@ public class Controller {
     }
 
     @GetMapping("/tdl/{id}")
-    public ModelAndView getTdl(@PathVariable Long id, HttpSession session) {
-        Optional<TDL> byId = tdlRepository.findById(id);
-        TDL tdl = null;
-        if(byId.isPresent())
-            tdl = byId.get();
-        else {} // TODO what to do?
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("tdlDetails");
-        mav.addObject(tdl);
-//        session.setAttribute("tdl", tdl);
-        return mav;
+    public String getTdl(@PathVariable Long id, Model model) {
+        TDL tdl = (TDL) model.asMap().get("tdl");
+        if(tdl == null) {
+            Optional<TDL> byId = tdlRepository.findById(id);
+            if (byId.isPresent())
+                tdl = byId.get();
+            else {
+            } // TODO what to do?
+        }
+        model.addAttribute(tdl);
+        return "tdlDetails";
     }
 
     @PostMapping("/update/{id}")
     public String updateTdl(@ModelAttribute TDL tdl,
-                            @RequestParam List<Integer> checkedToDos) {
-
+                            @RequestParam(required = false) List<Integer> checkedToDos,
+                            RedirectAttributes redirectAttributes) {
+        // hidden input으로 tdl에 todos 바인딩 받는것보다 repo에서 id로 tdl 가져오는 게 나을 수도
         List<ToDo> todos = tdl.getTodos();
-        for(int i=0; i<checkedToDos.size(); i++){
-            todos.get(checkedToDos.get(i)).setDone(true);
+        if(checkedToDos != null) {
+            for (int i = 0; i < checkedToDos.size(); i++) {
+                todos.get(checkedToDos.get(i)).setDone(true);
+            }
         }
         tdlRepository.save(tdl);
-        return "redirect:/";
+        redirectAttributes.addFlashAttribute(tdl);
+        return "redirect:/tdl/" + tdl.getId();
     }
 
 }

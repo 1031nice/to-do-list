@@ -349,20 +349,14 @@ https://www.youtube.com/watch?v=Y0tUaidXRqo&t=2090s&ab_channel=%EB%B0%B1%EA%B8%B
 <br>동등성을 비교하기 위해서는 객체에 equals()를 오버라이드 하거나, 테스트 코드 내에서
 객체의 동일성을 비교하는 별도의 메소드를 만들어야 한다.
 
-다음엔 validation이랑 bindingResult 이용해서 processCreateForm() 개선해보자.
-
-20.11.1.
-
-`ToDoFormatter`가 없으면 `createForm.html`에서 `input` 태그에
-공백을 주었을 때 `TDL`에 바인딩 된 `ToDo`를 보면 `null`이 아니라 공백으로 binding이 되는데,
-`ToDoFormatter`를 등록하면 `null`이 되네?..
-
 20.11.2.
 
 - `Controller`의 `updateTdl()` 개선
 
-HttpSession을 이용하지 않고 hidden input으로 TDL 객체의 값을 전달하는 방식을 써서
-update를 구현하였다. 더 자연스러워진 것 같다.
+`HttpSession`을 이용하지 않고 hidden input으로 TDL 객체의 값을 전달하는 방식을 써서
+update를 구현하였다. 더 자연스러워진 것 같다. 그리고 루트가 아니라 변경한 그 TDL을 보여주는
+get 요청으로 redirect하도록 수정하였다. (post -> redirect -> get)
+- `tdlDetails` 뷰에서 `isDone`이 `true`인 `ToDo` 객체의 이름에 취소선 효과 추가
 
 TIL
 
@@ -376,3 +370,6 @@ HTML에서 그 객체의 정보를 쓰는 곳에 view가 적절한 값을 대입
 객체 그 자체를 보낼 방법은 없고 view에 hidden input 이라도 만들어서
 보내줘야 그 객체를 받는 효과를 낼 수 있는 것 같다. 그러지 않고 view에서 `th:object`하고 handler에서 `@ModelAttribute` 하면
 그냥 객체가 새로 생긴 다음 아무것도 바인딩 되지 않는다.
+
+- thymeleaf link expression 안에서 variable expression 사용하는 방법 
+<br>`<form th:action="@{/update/{id}(id=${TDL.id})}" th:object="${TDL}" method="post">`
