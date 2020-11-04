@@ -1,5 +1,8 @@
 package me.donghun.todolist;
 
+import me.donghun.todolist.tdl.TDL;
+import me.donghun.todolist.tdl.TDLRepository;
+import me.donghun.todolist.tdl.ToDo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -8,9 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
 @Component
 @Transactional

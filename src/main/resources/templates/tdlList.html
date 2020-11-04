@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>to-do-list list</title>
+</head>
+<body>
+<h1>my to-do-list</h1>
+<form method="get" th:action="@{/create}">
+    <input value="make to-do-list" type="submit">
+</form>
+<tr th:each="tdl : ${tdlList}">
+    <a th:href="@{/tdl/__${tdl.id}__}" th:text="${tdl.date}"></a><br>
+</tr>
+</body>
+</html>

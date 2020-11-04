@@ -1,4 +1,4 @@
-package me.donghun.todolist;
+package me.donghun.todolist.tdl;
 
 import org.springframework.format.Formatter;
 import org.springframework.stereotype.Component;

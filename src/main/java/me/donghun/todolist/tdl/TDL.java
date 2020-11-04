@@ -1,9 +1,6 @@
-package me.donghun.todolist;
-
-import org.hibernate.annotations.Fetch;
+package me.donghun.todolist.tdl;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;

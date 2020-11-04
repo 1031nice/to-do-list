@@ -1,4 +1,4 @@
-package me.donghun.todolist;
+package me.donghun.todolist.tdl;
 
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -7,20 +7,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpSession;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @org.springframework.stereotype.Controller
-public class Controller {
+public class TDLController {
 
     private final TDLRepository tdlRepository;
 
     private static final String VIEWS_CREATE_OR_UPDATE_FORM = "createOrUpdateForm";
 
-    public Controller(TDLRepository tdlRepository) {
+    public TDLController(TDLRepository tdlRepository) {
         this.tdlRepository = tdlRepository;
     }
 
@@ -29,7 +26,7 @@ public class Controller {
     public ModelAndView index(){
         List<TDL> tdlList = tdlRepository.findAll();
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("index");
+        mav.setViewName("tdlList");
         mav.addObject("tdlList", tdlList);
         return mav;
     }
@@ -73,6 +70,8 @@ public class Controller {
     @GetMapping("/tdl/{id}")
     public String getTdl(@PathVariable Long id, Model model) {
         TDL tdl = (TDL) model.asMap().get("tdl");
+        // model에 tdl 객체가 있으면 redirect 요청
+        // model에 tdl 객체가 있으면 index 뷰에서 온 요청
         if(tdl == null) {
             Optional<TDL> byId = tdlRepository.findById(id);
             if (byId.isPresent())

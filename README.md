@@ -373,3 +373,7 @@ HTML에서 그 객체의 정보를 쓰는 곳에 view가 적절한 값을 대입
 
 - thymeleaf link expression 안에서 variable expression 사용하는 방법 
 <br>`<form th:action="@{/update/{id}(id=${TDL.id})}" th:object="${TDL}" method="post">`
+
+20.11.4.
+
+사용자를 추가해보자. 연속으로 하루의 모든 계획을 완수한 연속된 기간을 저장해두면 좋을거같다.
