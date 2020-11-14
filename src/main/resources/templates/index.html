@@ -6,10 +6,11 @@
     <title>Welcome</title>
 </head>
 <body>
-<form th:action="@{/login}" method="post">
+<h1>WELCOME</h1>
+<form th:action="@{/users/login}" method="post">
     <input type="text" name="userId">
-    <input type="password" name="password">
-    <input type="submit" value="login">
+    <br><input type="password" name="password">
+    <br><input type="submit" value="login">
 </form>
 </body>
 </html>

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @org.springframework.stereotype.Controller
+@RequestMapping("/tdls")
 public class TDLController {
 
     private final TDLRepository tdlRepository;
@@ -22,7 +23,7 @@ public class TDLController {
     }
 
     // 인덱스 페이지에 이렇게 하면 데이터를 전송할 수 있을까? yes!
-    @GetMapping("/")
+    @RequestMapping
     public ModelAndView index(){
         List<TDL> tdlList = tdlRepository.findAll();
         ModelAndView mav = new ModelAndView();
@@ -64,10 +65,10 @@ public class TDLController {
             return VIEWS_CREATE_OR_UPDATE_FORM;
         }
         tdlRepository.save(tdl);
-        return "redirect:/tdl/" + tdl.getId();
+        return "redirect:/tdls/" + tdl.getId();
     }
 
-    @GetMapping("/tdl/{id}")
+    @GetMapping("/{id}")
     public String getTdl(@PathVariable Long id, Model model) {
         TDL tdl = (TDL) model.asMap().get("tdl");
         // model에 tdl 객체가 있으면 redirect 요청
@@ -96,7 +97,7 @@ public class TDLController {
         }
         tdlRepository.save(tdl);
         redirectAttributes.addFlashAttribute(tdl);
-        return "redirect:/tdl/" + tdl.getId();
+        return "redirect:/tdls/" + tdl.getId();
     }
 
 }

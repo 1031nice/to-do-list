@@ -2,15 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>to-do-list list</title>
+    <title>list</title>
+    <link th:href="@{/css/simple.css}" rel="stylesheet" />
 </head>
 <body>
-<h1>my to-do-list</h1>
-<form method="get" th:action="@{/create}">
+<h1>
+    <a th:href="@{/tdls}">my to-do-list</a>
+</h1>
+<form method="get" th:action="@{/tdls/create}">
     <input value="make to-do-list" type="submit">
 </form>
 <tr th:each="tdl : ${tdlList}">
-    <a th:href="@{/tdl/__${tdl.id}__}" th:text="${tdl.date}"></a><br>
+    <a th:href="@{/tdls/__${tdl.id}__}" th:text="${tdl.date}"></a><br>
 </tr>
 </body>
 </html>

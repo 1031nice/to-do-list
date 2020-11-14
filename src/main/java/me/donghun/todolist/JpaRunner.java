@@ -3,6 +3,8 @@ package me.donghun.todolist;
 import me.donghun.todolist.tdl.TDL;
 import me.donghun.todolist.tdl.TDLRepository;
 import me.donghun.todolist.tdl.ToDo;
+import me.donghun.todolist.user.User;
+import me.donghun.todolist.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -21,7 +23,10 @@ public class JpaRunner implements ApplicationRunner {
     EntityManager entityManager;
 
     @Autowired
-    TDLRepository repository;
+    TDLRepository tdlRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -36,16 +41,17 @@ public class JpaRunner implements ApplicationRunner {
         tdl.getTodos().add(toDo2);
         tdl.getTodos().add(toDo3);
 
-        repository.save(tdl);
+        tdlRepository.save(tdl);
+
+        User user = new User();
+        user.setUserId("admin");
+        user.setPassword("1234");
+        userRepository.save(user);
 
 //        entityManager.persist(tdl);
         // hibernate 핵심 클래스
 //        Session session = entityManager.unwrap(Session.class);
 //        session.save(tdl);
-    }
-
-    class Account {
-
     }
 
 }

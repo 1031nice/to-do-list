@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -26,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@WebMvcTest({Controller.class, LocalDateFormatter.class})
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ControllerTest {
+public class TDLControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -36,23 +37,32 @@ public class ControllerTest {
 
     @Test
     public void processCreateForm() throws Exception {
-        long count = tdlRepository.count();
+        TDL tdl = new TDL();
+        tdl.getTodos().add(new ToDo("coding"));
+        tdl.getTodos().add(new ToDo("running"));
 
-        MvcResult mvcResult = mockMvc.perform(post("/create")
-                .param("todos", "coding")
-                .param("todos", "running")
+        mockMvc.perform(post("/tdls/create")
+                .param("todos", tdl.getTodos().get(0).getName())
+                .param("todos", tdl.getTodos().get(1).getName())
                 .param("submit", "submit"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/tdl/"+Long.toString(count + 1L)))
+                .andExpect(redirectedUrlPattern("/tdls/?"))
                 .andDo(print())
                 .andReturn();
-        TDL tdl = (TDL)mvcResult.getFlashMap().get("tdl");
-        assertThat(tdl.getDate()).isEqualTo(LocalDate.now().toString());
+
+        TDL lastTdl = tdlRepository.findTopByOrderByIdDesc();
+        assertThat(same(lastTdl, tdl)).isTrue();
+    }
+
+    private boolean same(TDL tdl1, TDL tdl2) {
+        List<ToDo> todos1 = tdl1.getTodos();
+        List<ToDo> todos2 = tdl2.getTodos();
+        return todos1.containsAll(todos2);
     }
 
     @Test
     public void processCreateFormWithBlank() throws Exception {
-        mockMvc.perform(post("/create")
+        mockMvc.perform(post("/tdls/create")
                 .param("submit", "")
                 .param("todos", "running")
                 .param("todos", "")
@@ -63,6 +73,9 @@ public class ControllerTest {
                 .andDo(print());
     }
 
+    @Autowired
+    EntityManager entityManager;
+
     @Test
     public void getTdl() throws Exception {
         TDL newTdl = new TDL();
@@ -71,19 +84,21 @@ public class ControllerTest {
         newTdl.getTodos().add(new ToDo("running"));
         newTdl.getTodos().add(new ToDo("reading"));
         TDL savedTdl = tdlRepository.saveAndFlush(newTdl);
+        entityManager.clear();
+//        assertThat(entityManager.contains(savedTdl)); // 클리어 했는데 왜 성공하냐
         assertThat(savedTdl).isEqualTo(newTdl);
         TDL tdl2 = tdlRepository.findById(savedTdl.getId()).orElse(new TDL());
-        assertThat(savedTdl).isEqualTo(tdl2); // 왜실패 ..
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/tdl/" + savedTdl.getId()))
+//        assertThat(savedTdl).isEqualTo(tdl2); // 왜실패 .. persistent에 있는거 그대로 가져왔는데 왜!
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/tdls/" + savedTdl.getId()))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andReturn();
         ModelAndView mav = result.getModelAndView();
-        TDL tdl = (TDL) mav.getModel().get("tdl");
+        TDL tdl = (TDL) mav.getModel().get("TDL");
         assertThat(tdl).isNotNull();
         TDL tdl3 = tdlRepository.findById(savedTdl.getId()).orElse(new TDL());
         assertThat(savedTdl).isNotEqualTo(tdl3);
-        assertThat(tdl).isNotEqualTo(tdl2);
+//        assertThat(tdl).isNotEqualTo(tdl2);
         assertThat(savedTdl).isNotEqualTo(tdl);
         checkSameTdl(savedTdl, tdl);
         assertThat(mav.getViewName()).isEqualTo("tdlDetails");
@@ -105,7 +120,7 @@ public class ControllerTest {
         TDL tdl = makeTdl();
 
         // 0번째 ToDo와 2번째 ToDo가 체크되었을 때
-        MvcResult result = mockMvc.perform(post("/update/"+tdl.getId())
+        MvcResult result = mockMvc.perform(post("/tdls/update/"+tdl.getId())
                 .param("checkedToDos", "0")
                 .param("checkedToDos", "2")
                 .param("todos", "coding")

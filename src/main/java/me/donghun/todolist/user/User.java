@@ -5,8 +5,9 @@ import me.donghun.todolist.tdl.TDL;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-@Entity(name = "_user")
+@Entity(name = "users")
 public class User {
     @Id
     @GeneratedValue
@@ -17,6 +18,14 @@ public class User {
     private Integer successInARow;
     @OneToMany
     private List<TDL> tdls = new ArrayList<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getUserId() {
         return userId;
@@ -35,5 +44,14 @@ public class User {
     }
     public void setSuccessInARow(Integer successInARow) {
         this.successInARow = successInARow;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(userId, user.userId) &&
+                Objects.equals(password, user.password);
     }
 }

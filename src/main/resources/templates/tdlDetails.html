@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>to-do details</title>
+    <link th:href="@{/css/simple.css}" rel="stylesheet" />
 </head>
 <body>
-<form th:action="@{/update/{id}(id=${TDL.id})}" th:object="${TDL}" method="post">
+<h1>
+    <a th:href="@{/tdls}">my to-do-list</a>
+</h1>
+<form th:action="@{/tdls/update/{id}(id=${TDL.id})}" th:object="${TDL}" method="post">
     <table>
         <tr th:text="*{date}"></tr>
         <tr th:each="todo, iter : *{todos}">
