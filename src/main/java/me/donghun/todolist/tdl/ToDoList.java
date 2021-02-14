@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class TDL implements Serializable {
+public class ToDoList implements Serializable {
 
     @Id @GeneratedValue
     private Long id;

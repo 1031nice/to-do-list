@@ -10,8 +10,7 @@ import java.util.Locale;
 public class TodoFormatter implements Formatter<ToDo> {
     @Override
     public ToDo parse(String s, Locale locale) throws ParseException {
-        ToDo toDo = new ToDo(s);
-        return toDo;
+        return new ToDo(s);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package me.donghun.todolist;
 
-import me.donghun.todolist.tdl.TDL;
-import me.donghun.todolist.tdl.TDLRepository;
+import me.donghun.todolist.tdl.ToDoList;
+import me.donghun.todolist.tdl.ToDoListRepository;
 import me.donghun.todolist.tdl.ToDo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,11 +18,11 @@ import java.util.Optional;
 public class RepositoryTest {
 
     @Autowired
-    TDLRepository repository;
+    ToDoListRepository repository;
 
     @Test
     public void save() {
-        TDL tdl = new TDL();
+        ToDoList tdl = new ToDoList();
         ToDo[] toDos = new ToDo[3];
         toDos[0] = new ToDo();
         toDos[0].setName("1. running");
@@ -38,7 +38,7 @@ public class RepositoryTest {
 
     @Test
     public void lazyLoading() {
-        Optional<TDL> tdl = repository.findById(1L);
+        Optional<ToDoList> tdl = repository.findById(1L);
     }
 
 }

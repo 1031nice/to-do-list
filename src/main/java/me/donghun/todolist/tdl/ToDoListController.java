@@ -12,20 +12,20 @@ import java.util.Optional;
 
 @org.springframework.stereotype.Controller
 @RequestMapping("/tdls")
-public class TDLController {
+public class ToDoListController {
 
-    private final TDLRepository tdlRepository;
+    private final ToDoListRepository tdlRepository;
 
     private static final String VIEWS_CREATE_OR_UPDATE_FORM = "createOrUpdateForm";
 
-    public TDLController(TDLRepository tdlRepository) {
+    public ToDoListController(ToDoListRepository tdlRepository) {
         this.tdlRepository = tdlRepository;
     }
 
     // 인덱스 페이지에 이렇게 하면 데이터를 전송할 수 있을까? yes!
     @RequestMapping
     public ModelAndView index(){
-        List<TDL> tdlList = tdlRepository.findAll();
+        List<ToDoList> tdlList = tdlRepository.findAll();
         ModelAndView mav = new ModelAndView();
         mav.setViewName("tdlList");
         mav.addObject("tdlList", tdlList);
@@ -34,9 +34,9 @@ public class TDLController {
 
     @GetMapping("/create")
     public String createForm(Model model) {
-        TDL tdl = (TDL) model.getAttribute("TDL");
+        ToDoList tdl = (ToDoList) model.getAttribute("TDL");
         if(tdl == null) {
-            tdl = new TDL();
+            tdl = new ToDoList();
             tdl.getTodos().add(new ToDo("what to do"));
         }
         model.addAttribute(tdl); // 따로 지정안하면 이름은 클래스명으로 들어가는 것 같다
@@ -44,14 +44,14 @@ public class TDLController {
     }
 
     @PostMapping(value = "/create", params = "add")
-    public String addCreateForm(@ModelAttribute TDL tdl) {
+    public String addCreateForm(@ModelAttribute ToDoList tdl) {
         tdl.getTodos().add(new ToDo("what to do"));
 //        model.addAttribute("tdl", tdl); Model에 자동으로 추가
         return VIEWS_CREATE_OR_UPDATE_FORM;
     }
 
     @PostMapping(value = "/create", params = "submit")
-    public String processCreateForm(@ModelAttribute TDL tdl,
+    public String processCreateForm(@ModelAttribute ToDoList tdl,
                                     BindingResult bindingResult) {
         List<ToDo> todos = tdl.getTodos();
         // VALIDATE
@@ -70,11 +70,11 @@ public class TDLController {
 
     @GetMapping("/{id}")
     public String getTdl(@PathVariable Long id, Model model) {
-        TDL tdl = (TDL) model.asMap().get("tdl");
+        ToDoList tdl = (ToDoList) model.asMap().get("tdl");
         // model에 tdl 객체가 있으면 redirect 요청
         // model에 tdl 객체가 있으면 index 뷰에서 온 요청
         if(tdl == null) {
-            Optional<TDL> byId = tdlRepository.findById(id);
+            Optional<ToDoList> byId = tdlRepository.findById(id);
             if (byId.isPresent())
                 tdl = byId.get();
             else {
@@ -85,10 +85,11 @@ public class TDLController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateTdl(@ModelAttribute TDL tdl,
+    public String updateTdl(@ModelAttribute ToDoList tdl,
                             @RequestParam(required = false) List<Integer> checkedToDos,
                             RedirectAttributes redirectAttributes) {
         // hidden input으로 tdl에 todos 바인딩 받는것보다 repo에서 id로 tdl 가져오는 게 나을 수도
+        System.out.println(checkedToDos);
         List<ToDo> todos = tdl.getTodos();
         if(checkedToDos != null) {
             for (int i = 0; i < checkedToDos.size(); i++) {
@@ -97,7 +98,8 @@ public class TDLController {
         }
         tdlRepository.save(tdl);
         redirectAttributes.addFlashAttribute(tdl);
-        return "redirect:/tdls/" + tdl.getId();
+//        return "redirect:/tdls/" + tdl.getId();
+        return "redirect:/tdls/{id}";
     }
 
 }

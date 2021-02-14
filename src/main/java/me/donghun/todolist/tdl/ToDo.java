@@ -1,32 +1,20 @@
 package me.donghun.todolist.tdl;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 @Embeddable
+@Getter @Setter
 public class ToDo {
 
     @NotBlank
     private String name;
 
     private boolean isDone = false;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isDone() {
-        return isDone;
-    }
-
-    public void setDone(boolean done) {
-        isDone = done;
-    }
 
     public ToDo() {
     }

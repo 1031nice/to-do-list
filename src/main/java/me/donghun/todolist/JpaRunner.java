@@ -1,7 +1,7 @@
 package me.donghun.todolist;
 
-import me.donghun.todolist.tdl.TDL;
-import me.donghun.todolist.tdl.TDLRepository;
+import me.donghun.todolist.tdl.ToDoList;
+import me.donghun.todolist.tdl.ToDoListRepository;
 import me.donghun.todolist.tdl.ToDo;
 import me.donghun.todolist.user.User;
 import me.donghun.todolist.user.UserRepository;
@@ -23,7 +23,7 @@ public class JpaRunner implements ApplicationRunner {
     EntityManager entityManager;
 
     @Autowired
-    TDLRepository tdlRepository;
+    ToDoListRepository tdlRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -36,7 +36,7 @@ public class JpaRunner implements ApplicationRunner {
         ToDo toDo3 = new ToDo("studying");
         toDo3.setDone(true);
 
-        TDL tdl = new TDL();
+        ToDoList tdl = new ToDoList();
         tdl.getTodos().add(toDo);
         tdl.getTodos().add(toDo2);
         tdl.getTodos().add(toDo3);
@@ -44,7 +44,7 @@ public class JpaRunner implements ApplicationRunner {
         tdlRepository.save(tdl);
 
         User user = new User();
-        user.setUserId("admin");
+        user.setUserId("qwer");
         user.setPassword("1234");
         userRepository.save(user);
 

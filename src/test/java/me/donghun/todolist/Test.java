@@ -2,7 +2,7 @@ package me.donghun.todolist;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.donghun.todolist.tdl.TDL;
+import me.donghun.todolist.tdl.ToDoList;
 import me.donghun.todolist.tdl.ToDo;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class Test {
 
     @org.junit.Test
     public void multiValueMap() {
-        TDL tdl = new TDL();
+        ToDoList tdl = new ToDoList();
         tdl.setDate(LocalDate.now());
         ToDo toDo = new ToDo();
         toDo.setName("coding");
