@@ -1,43 +1,23 @@
 package me.donghun.todolist.tdl;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
 import javax.validation.constraints.NotBlank;
-import java.util.Objects;
 
 @Embeddable
-@Getter @Setter
+@Getter @Setter @NoArgsConstructor
+@EqualsAndHashCode(of = {"name", "done"})
+@ToString(of = {"name", "done"})
 public class ToDo {
 
     @NotBlank
     private String name;
 
-    private boolean isDone = false;
-
-    public ToDo() {
-    }
+    private boolean done = false;
 
     public ToDo(String name) {
         this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "ToDo{" +
-                "name='" + name + '\'' +
-                ", isDone=" + isDone +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ToDo toDo = (ToDo) o;
-        return isDone == toDo.isDone &&
-                Objects.equals(name, toDo.name);
     }
 
 }

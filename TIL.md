@@ -391,3 +391,25 @@ TIL
 요청 파라미터를 전달받는다. 반면에 POST의 경우라면 HTTP 요청 본문이 제공되므로
 `@RequestBody`를 사용할 수 있다.
 <br>토비의 스프링 3.1 vol2 중에서
+
+21.2.14.
+
+TIL
+
+- id가 아닌 다른 필드를 기준으로 엔티티를 찾아달라고 요청하면
+원하는 엔티티가 persistent 상태여도 DB에 쿼리를 날리는 것 같다.
+```java
+    void test() {
+        User user = new User();
+        user.setUserId("donghun");
+        user.setPassword("1234");
+        userRepository.save(user); // 이제부터 user는 persistent 객체
+
+        // 필드로 찾으면 원하는 객체가 persistent라고 하더라도 select 쿼리 발생
+        Optional<User> byUserId = userRepository.findByUserId(user.getUserId());
+        // id로 찾으면 persistent인 경우 DB까지 안가고 바로 관리하던 객체 리턴
+//        Optional<User> byUserId = userRepository.findById(user.getId());
+        assertThat(byUserId).isNotEmpty();
+        assertThat(byUserId.get()).isEqualTo(user);
+    }
+```
