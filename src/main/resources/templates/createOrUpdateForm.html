@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link th:href="@{/css/simple.css}" rel="stylesheet" />
 </head>
 <body>
 <h1>
-    <a th:href="@{/tdls}">my to-do-list</a>
+    <a th:href="@{/to-do-lists}">my to-do-list</a>
 </h1>
-<form th:action="@{/tdls/create}" th:object="${TDL}" method="post">
-    <p th:if="${#fields.hasErrors('todos')}" th:errors="*{todos}">Incorrect todos</p>
-    <tr th:each="todo, iter : *{todos}">
+<form th:action="@{/to-do-lists/create}" th:object="${toDoList}" method="post">
+    <p th:if="${#fields.hasErrors('toDos')}" th:errors="*{toDos}">Incorrect todos</p>
+    <tr th:each="toDo, iter : *{toDos}">
         <!--공백인 경우 ${todo.name}이 없어서 문제가되므로 빈 input을 보여준다-->
-        <input th:if="${todo != null}" th:name="todos" th:value="${todo.name}" type="text">
-        <input th:unless="${todo != null}" th:name="todos" type="text">
+        <input th:if="${toDo != null}" th:name="toDos" th:value="${toDo.name}" type="text">
+        <input th:unless="${toDo != null}" th:name="toDos" type="text">
         <br>
     </tr>
 

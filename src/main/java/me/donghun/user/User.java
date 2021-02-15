@@ -1,9 +1,9 @@
-package me.donghun.todolist.user;
+package me.donghun.user;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import me.donghun.todolist.tdl.ToDoList;
+import me.donghun.todolist.ToDoList;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

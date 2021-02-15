@@ -2,8 +2,6 @@ package me.donghun.todolist;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.donghun.todolist.tdl.ToDoList;
-import me.donghun.todolist.tdl.ToDo;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;

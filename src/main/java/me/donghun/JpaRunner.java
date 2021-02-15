@@ -1,10 +1,10 @@
-package me.donghun.todolist;
+package me.donghun;
 
-import me.donghun.todolist.tdl.ToDoList;
-import me.donghun.todolist.tdl.ToDoListRepository;
-import me.donghun.todolist.tdl.ToDo;
-import me.donghun.todolist.user.User;
-import me.donghun.todolist.user.UserRepository;
+import me.donghun.todolist.ToDoList;
+import me.donghun.todolist.ToDoListRepository;
+import me.donghun.todolist.ToDo;
+import me.donghun.user.User;
+import me.donghun.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -37,9 +37,9 @@ public class JpaRunner implements ApplicationRunner {
         toDo3.setDone(true);
 
         ToDoList tdl = new ToDoList();
-        tdl.getTodos().add(toDo);
-        tdl.getTodos().add(toDo2);
-        tdl.getTodos().add(toDo3);
+        tdl.getToDos().add(toDo);
+        tdl.getToDos().add(toDo2);
+        tdl.getToDos().add(toDo3);
 
         tdlRepository.save(tdl);
 

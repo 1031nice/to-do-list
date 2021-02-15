@@ -1,5 +1,7 @@
 package me.donghun.todolist.user;
 
+import me.donghun.user.User;
+import me.donghun.user.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

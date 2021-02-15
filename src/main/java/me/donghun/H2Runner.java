@@ -1,4 +1,4 @@
-package me.donghun.todolist;
+package me.donghun;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;

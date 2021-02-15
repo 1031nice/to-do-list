@@ -1,4 +1,4 @@
-package me.donghun.todolist.user;
+package me.donghun.user;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +22,7 @@ public class UserController {
         Optional<User> byUserId = userRepository.findByUserId(user.getUserId());
         if(byUserId.isPresent()) {
             session.setAttribute("user", user);
-            return "redirect:/tdls";
+            return "redirect:/to-do-lists";
         }
         else
             return "index";

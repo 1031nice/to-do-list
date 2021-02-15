@@ -1,4 +1,4 @@
-package me.donghun.todolist.user;
+package me.donghun.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

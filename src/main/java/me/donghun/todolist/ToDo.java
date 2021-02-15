@@ -1,4 +1,4 @@
-package me.donghun.todolist.tdl;
+package me.donghun.todolist;
 
 import lombok.*;
 
