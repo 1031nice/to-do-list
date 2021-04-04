@@ -349,7 +349,7 @@ https://www.youtube.com/watch?v=Y0tUaidXRqo&t=2090s&ab_channel=%EB%B0%B1%EA%B8%B
 <br>동등성을 비교하기 위해서는 객체에 equals()를 오버라이드 하거나, 테스트 코드 내에서
 객체의 동일성을 비교하는 별도의 메소드를 만들어야 한다.
 
-20.11.2.
+#### <br> 20.11.2. <br>
 
 - `Controller`의 `updateTdl()` 개선
 
@@ -374,15 +374,15 @@ HTML에서 그 객체의 정보를 쓰는 곳에 view가 적절한 값을 대입
 - thymeleaf link expression 안에서 variable expression 사용하는 방법 
 <br>`<form th:action="@{/update/{id}(id=${TDL.id})}" th:object="${TDL}" method="post">`
 
-20.11.4.
+#### <br> 20.11.4. <br>
 
 사용자를 추가해보자. 연속으로 하루의 모든 계획을 완수한 연속된 기간을 저장해두면 좋을거같다.
 
-20.11.14.
+#### <br> 20.11.14. <br>
 
 - login 구현
 
-20.11.30.
+#### <br> 20.11.30. <br>
 
 TIL
 
@@ -392,7 +392,7 @@ TIL
 `@RequestBody`를 사용할 수 있다.
 <br>토비의 스프링 3.1 vol2 중에서
 
-21.2.14.
+#### <br> 21.2.14. <br>
 
 TIL
 
@@ -414,7 +414,7 @@ TIL
     }
 ```
 
-21.2.14.
+#### <br> 21.2.15. <br>
 
 TIL
 
@@ -456,3 +456,10 @@ TIL
 //        assertThat(toDoList.equals(savedToDoList)).isTrue(); // 기대와 달리 실패
     }
 ```
+
+#### <br> 21.4.4. <br>
+
+bootstrap을 적용해보았다. 앞으로는 이 프로젝트를 개선할 때마다
+디자인도 조금씩 개선해나가면 좋을 것 같다. 로그인을 구현하고, spring security를 얹어보고,
+github 로그인 기능도 만들어보고 싶다. 웹 서비스 기능도 추가해서
+더 사용하기 좋게(더 복잡하게) 만들어보자.

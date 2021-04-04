@@ -4,31 +4,44 @@
     <meta charset="UTF-8">
     <title>to-do details</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <style>
+        .container {
+            max-width: 50%;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-light">
 <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
     <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/to-do-lists}">Home</a>
+        <a class="navbar-brand" th:href="@{/to-do-lists}">
+            <img src="/images/logo.png" width="30" height="30">
+        </a>
     </div>
 </nav>
-<form th:action="@{/to-do-lists/update/{id}(id=${toDoList.id})}" th:object="${toDoList}" method="post">
-    <table>
-        <tr th:text="*{date}"></tr>
-        <tr th:each="toDo, iter : *{toDos}">
-            <th th:text="${iter.index + 1} + ."></th>
-            <td>
-                <input class="form-check-input" type="checkbox" th:id="toDo + ${iter.index}" th:name="checkedToDos" th:value="${iter.index}" th:checked="${toDo.done}"/>
-<!--                <input type="hidden" th:id="todo + ${iter.index}" th:name="_checkedToDos" th:value="${iter.index}" th:checked="${toDo.done}"/>-->
-                <!-- 왜 bootstrap 넣었더니 취소선이 안되냐 -->
-                <del th:if="${toDo.done}"><label th:for="toDo + ${iter.index}" th:text="${toDo.name}"></label></del>
-                <label th:unless="${toDo.done}" th:for="toDo + ${iter.index}" th:text="${toDo.name}"></label>
-                <input type="hidden" th:name="toDos" th:value="${toDo.name}"/>
-            </td>
-        </tr>
-    </table>
-    <br>
-    <button type="submit" class="btn btn-primary" name="done">Submit</button>
-</form>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <form th:action="@{/to-do-lists/update/{id}(id=${toDoList.id})}" th:object="${toDoList}" method="post" th:align="center">
+            <table th:align="center">
+                <tr th:text="*{date}"></tr>
+                <tr th:each="toDo, iter : *{toDos}">
+                    <th th:text="${iter.index + 1} + ."></th>
+                    <td th:align="left">
+                        <input class="form-check-input" type="checkbox" th:id="toDo + ${iter.index}" th:name="checkedToDos" th:value="${iter.index}" th:checked="${toDo.done}"/>
+        <!--                <input type="hidden" th:id="todo + ${iter.index}" th:name="_checkedToDos" th:value="${iter.index}" th:checked="${toDo.done}"/>-->
+                        <!-- 왜 bootstrap 넣었더니 취소선이 안되냐 -->
+                        <!-- label이 아니라 span으로 바꾸고 del로 감쌌더니 되네 -->
+                        <del th:if="${toDo.done}"><span th:for="toDo + ${iter.index}" th:text="${toDo.name}"></span></del>
+                        <span th:unless="${toDo.done}" th:for="toDo + ${iter.index}" th:text="${toDo.name}"></span>
+                        <input type="hidden" th:name="toDos" th:value="${toDo.name}"/>
+                    </td>
+                </tr>
+            </table>
+            <br>
+            <button type="submit" class="btn btn-primary" name="done">Submit</button>
+        </form>
+    </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 </body>
 </html>
