@@ -413,3 +413,46 @@ TIL
         assertThat(byUserId.get()).isEqualTo(user);
     }
 ```
+
+21.2.14.
+
+TIL
+
+- PersistentBag의 equals는 기대와 다르게 동작하는 것 같다.
+```java
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ToDoList toDoList = (ToDoList) o;
+        return Objects.equals(date, toDoList.date) && Objects.equals(toDos, toDoList.toDos);
+    }
+
+    // toDos가 List에 담겨있을 때
+    public static void main(String[] args) {
+        ToDoList list1 = new ToDoList();
+        list1.setToDos(Arrays.asList(new ToDo("A"), new ToDo("B")));
+        ToDoList list2 = new ToDoList();
+        list2.setToDos(Arrays.asList(new ToDo("A"), new ToDo("B")));
+        ToDoList list3 = new ToDoList();
+        list3.setToDos(Arrays.asList(new ToDo("A"), new ToDo("C")));
+        System.out.println(list1.equals(list2)); // true(equals 기대한대로 동작)
+        System.out.println(list2.equals(list3)); // false(equals 기대한대로 동작)
+    }
+    
+    // toDos가 PersistentBag에 담겨있을 때
+    @Test
+    @DisplayName("ToDoList 가져오기")
+    void getToDoList() throws Exception {
+        ToDoList newToDoList=new ToDoList();
+        newToDoList.setToDos(Arrays.asList(new ToDo("A"),new ToDo("B"),new ToDo("C")));
+        ToDoList savedToDoList = toDoListRepository.save(newToDoList);
+    
+        MvcResult result = mockMvc.perform(get("/to-do-lists/"+savedToDoList.getId()))
+                                .andReturn();
+        
+        ModelAndView mav=result.getModelAndView();
+        ToDoList toDoList=(ToDoList)mav.getModel().get("toDoList");
+//        assertThat(toDoList.equals(savedToDoList)).isTrue(); // 기대와 달리 실패
+    }
+```
