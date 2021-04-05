@@ -13,10 +13,11 @@ public class UserService {
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
 
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
     public User processSignUp(SignUpForm signUpForm) {
-        Optional<User> byUsername = userRepository.findByUsername(signUpForm.getUsername());
-        if(byUsername.isPresent())
-            return null;
         User user = modelMapper.map(signUpForm, User.class);
         return userRepository.save(user);
     }

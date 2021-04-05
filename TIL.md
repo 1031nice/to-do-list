@@ -468,6 +468,8 @@ github 로그인 기능도 만들어보고 싶다. 웹 서비스 기능도 추�
 
 * sign-up 페이지 생성
 * 회원가입에 대한 테스트 코드 작성
+* UserService 생성, 직접 UserRepository를 사용하지 않도록 변경
+* SignUpFormValidator 생성, UserService의 processSignUp()에서 검증 과정 제외
 
 TIL
 
@@ -480,3 +482,15 @@ TIL
 이것저것 만지다보면 확실히 했다고 할 수 있는 부분이 무엇인지 말하기도 어렵고 테스트도 어려워진다.
 예를 들어, 회원가입 기능을 만들고자 한다면 아래와 같은 방식으로 한 번에 하나만 보는 게 좋다.
 <br> 엔티티 만들기 -> 뷰 만들기 -> 컨트롤러 만들기 -> 회원가입 처리 -> 값 검증 -> 리팩토링
+- [(아직 글쓰기 전)커스텀한 Validator를 만들어 InitBinder에 묶은 뒤 검증에 사용하기]()
+- ModelAndView의 Errors에 에러가 있는지 테스트하는 방법
+```java
+mockMvc.perform(post("/users/sign-up")
+        .param("username", "user1")
+        .param("password", "12341234")
+        .param("email", "user1@gmail.com"))
+        .andExpect(view().name("sign-up"))
+                                        // model attribute name, field name
+        .andExpect(model().attributeHasFieldErrors("signUpForm", "username"))
+        .andDo(print());
+```

@@ -110,6 +110,7 @@ class UserControllerTest {
                 .param("password", "12341234")
                 .param("email", "donghun@gmail.com"))
                 .andExpect(view().name("sign-up"))
+                .andExpect(model().attributeHasFieldErrors("signUpForm", "username"))
                 .andDo(print());
     }
 }
