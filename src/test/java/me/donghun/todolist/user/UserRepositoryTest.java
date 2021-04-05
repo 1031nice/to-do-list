@@ -20,11 +20,11 @@ class UserRepositoryTest {
     @DisplayName("유저 아이디로 유저 찾기")
     void test() {
         User user = new User();
-        user.setUserId("donghun");
+        user.setUsername("donghun");
         user.setPassword("1234");
         userRepository.save(user);
 
-        Optional<User> byUserId = userRepository.findByUserId(user.getUserId());
+        Optional<User> byUserId = userRepository.findByUsername(user.getUsername());
         assertThat(byUserId).isNotEmpty();
         assertThat(byUserId.get()).isEqualTo(user);
     }

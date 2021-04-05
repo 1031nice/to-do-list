@@ -44,7 +44,7 @@ public class JpaRunner implements ApplicationRunner {
         tdlRepository.save(tdl);
 
         User user = new User();
-        user.setUserId("qwer");
+        user.setUsername("qwer");
         user.setPassword("1234");
         userRepository.save(user);
 

@@ -30,14 +30,14 @@ class UserControllerTest {
     @DisplayName("로그인 성공")
     void loginSuccess() throws Exception {
         User user = new User();
-        user.setUserId("1031nice");
+        user.setUsername("1031nice");
         user.setPassword("1031");
         user = userRepository.save(user);
         Optional<User> byId = userRepository.findById(user.getId());
         User savedUser = byId.get();
 
         mockMvc.perform(post("/users/login")
-                .param("userId", savedUser.getUserId())
+                .param("userId", savedUser.getUsername())
                 .param("password", savedUser.getPassword()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/tdls"))
